@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Bell, ChevronDown, ChevronUp, Search, Plus, Users, Settings, LogOut } from "lucide-react";
+import { Bell, ChevronDown, ChevronUp, Search, Plus, Users, Settings, LogOut, Folder } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { 
   DropdownMenu,
@@ -173,6 +173,44 @@ export function Header({ currentTeamId: initialTeamId, setCurrentTeamId: setPare
           <div className="w-20 h-8" /> // Empty space while loading
         ) : isAuthenticated ? (
           <>
+            {/* Projects Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button 
+                  variant="ghost"
+                  size="sm"
+                  className="flex items-center gap-2 rounded-md hover:bg-gray-100"
+                  title="Projects"
+                >
+                  <Folder className="w-4 h-4 text-gray-600" />
+                  <span className="hidden sm:inline text-sm text-gray-700">Projects</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuItem className="text-sm">
+                  <Link href="/projects" className="w-full">
+                    View All Projects
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="text-sm">
+                  <Link href="/projects?status=pending" className="w-full">
+                    Pending Projects
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="text-sm">
+                  <Link href="/projects?status=active" className="w-full">
+                    Active Projects
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="text-sm">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Create Project
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
             <HeaderButton icon={Bell} label="Notifications" badge="12" />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

@@ -116,12 +116,18 @@ function DashboardTab({ userRole }: { userRole: "BA" | "Client" }) {
               {userRole === "BA" ? "Recent Chats" : "Recent Requests"}
             </h2>
             <ul className="space-y-3">
-              {(userRole === "BA" ? mockChats : mockRequests).map((item) => (
-                <li key={item.id} className="flex justify-between items-center">
-                  <p className="text-black font-medium">{item.name || item.title}</p>
-                  {item.status && <StatusBadge status={item.status} />}
-                </li>
-              ))}
+              {userRole === "BA"
+                ? mockChats.map((item) => (
+                    <li key={item.id} className="flex justify-between items-center">
+                      <p className="text-black font-medium">{item.name}</p>
+                    </li>
+                  ))
+                : mockRequests.map((item) => (
+                    <li key={item.id} className="flex justify-between items-center">
+                      <p className="text-black font-medium">{item.title}</p>
+                      {item.status && <StatusBadge status={item.status} />}
+                    </li>
+                  ))}
             </ul>
           </section>
 
@@ -173,7 +179,7 @@ function ChatsTab({ chats }: { chats: typeof mockChats }) {
 }
 
 // Settings Tab Content
-function SettingsTab({ projectName, projectDescription }: { projectName: string; projectDescription: string }) {
+function SettingsTab({ projectName, projectDescription }: { projectName: string; projectDescription?: string }) {
   return (
     <div className="flex flex-col gap-6 bg-gray-50 p-6 min-h-screen">
       <section className="bg-white border border-gray-200 rounded-xl p-6">
@@ -195,7 +201,7 @@ function SettingsTab({ projectName, projectDescription }: { projectName: string;
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
             <textarea
-              value={projectDescription}
+              value={projectDescription || ""}
               className="w-full rounded-md border border-gray-300 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-[#341bab]"
             />
           </div>
