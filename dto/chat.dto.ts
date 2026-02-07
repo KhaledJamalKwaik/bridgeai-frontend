@@ -49,6 +49,11 @@ export interface WebSocketMessageData {
   error?: string;
   status?: string; // e.g. "thinking", "drafting", "idle"
   is_generating?: boolean;
+  is_suggestions?: boolean; // Flag indicating this is a suggestions message
+  suggestions_metadata?: {
+    count: number;
+    trigger: string; // "keyword", "crs_complete", or "manual"
+  };
   crs?: {
     // Action type (backward compatible - defaults to full update if not specified)
     action?: "updated";
