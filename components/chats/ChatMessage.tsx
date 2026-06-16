@@ -1,11 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Bot, HelpCircle, FileText, User as UserIcon, Briefcase, Sparkles } from "lucide-react";
+import { Bot, HelpCircle, FileText, User as UserIcon, Briefcase, Sparkles, Lightbulb } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { cn } from "@/lib/utils";
 
-export type MessageType = "user" | "ai" | "ai-clarification" | "ai-crs" | "ba";
+export type MessageType = "user" | "ai" | "ai-clarification" | "ai-crs" | "ai-suggestions" | "ba";
 
 export interface ChatMessageData {
   id: number;
@@ -17,6 +17,11 @@ export interface ChatMessageData {
   pending?: boolean;
   failed?: boolean;
   _localId?: string;
+  is_suggestions?: boolean;
+  suggestions_metadata?: {
+    count: number;
+    trigger: string;
+  };
 }
 
 interface ChatMessageProps {
@@ -33,6 +38,11 @@ function detectMessageType(message: ChatMessageData): MessageType {
   // AI message type detection
   if (message.sender_type === "ai") {
     const content = message.content.toLowerCase();
+
+    // Check for suggestions messages
+    if (message.is_suggestions || content.includes("💡") || content.includes("creative suggestions")) {
+      return "ai-suggestions";
+    }
 
     // Check for CRS/template filler responses
     if (
@@ -65,6 +75,8 @@ function detectMessageType(message: ChatMessageData): MessageType {
 // Get icon for message type
 function getMessageIcon(type: MessageType) {
   switch (type) {
+    case "ai-suggestions":
+      return <Lightbulb className="w-4 h-4" />;
     case "ai-clarification":
       return <HelpCircle className="w-4 h-4" />;
     case "ai-crs":

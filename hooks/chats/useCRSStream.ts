@@ -15,7 +15,8 @@ export type CRSStreamEvent = {
   | "crs_updated"
   | "crs_error"
   | "crs_retry"
-  | "crs_partial";
+  | "crs_partial"
+  | "suggestions_generated";
   session_id?: number;
   percentage?: number;
   step?: string;
@@ -36,6 +37,8 @@ export type CRSStreamEvent = {
   timestamp?: string;
   crs_document_id?: number;
   content?: string;
+  suggestions?: any[];
+  trigger?: string;
 };
 
 export type CRSStreamStatus = "idle" | "connecting" | "connected" | "error" | "closed";
@@ -187,6 +190,15 @@ export function useCRSStream({
             if (data.message) {
               setCurrentStep(data.message);
             }
+            if (onProgress) {
+              onProgress(data);
+            }
+            break;
+
+          case "suggestions_generated":
+            console.log('[CRS Stream] Suggestions generated:', data.suggestions?.length || 0);
+            // Suggestions are handled via WebSocket as chat messages
+            // This event is for logging/analytics only
             if (onProgress) {
               onProgress(data);
             }
